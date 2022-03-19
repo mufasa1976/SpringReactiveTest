@@ -1,0 +1,9 @@
+spring:
+  r2dbc:
+    url: "r2dbc:mariadb://spring-reactive.local/spring-reactive"
+    username: spring-reactive
+    password: spring-reactive
+  flyway:
+    url: "jdbc:mariadb://spring-reactive.local/spring-reactive"
+    user: spring-reactive
+    password: spring-reactive

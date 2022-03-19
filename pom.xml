@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>software.coolstuff.spring.reactive</groupId>
+  <artifactId>spring-reactive-test</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <java.version>11</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <spring-boot.version>2.6.4</spring-boot.version>
+    <r2dbc.version>Arabba-SR12</r2dbc.version>
+    <mariadb-r2dbc.version>1.0.3</mariadb-r2dbc.version>
+    <mssql-r2dbc.version>0.8.8.RELEASE</mssql-r2dbc.version>
+    <mssql-jdbc.version>9.2.1.jre11</mssql-jdbc.version>
+    <mapstruct.version>1.4.2.Final</mapstruct.version>
+
+    <lombok.version>1.18.22</lombok.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.mapstruct</groupId>
+        <artifactId>mapstruct</artifactId>
+        <version>${mapstruct.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.r2dbc</groupId>
+        <artifactId>r2dbc-bom</artifactId>
+        <version>${r2dbc.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.mariadb</groupId>
+        <artifactId>r2dbc-mariadb</artifactId>
+        <version>${mariadb-r2dbc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.r2dbc</groupId>
+        <artifactId>r2dbc-mssql</artifactId>
+        <version>${mssql-r2dbc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>mssql-jdbc</artifactId>
+        <version>${mssql-jdbc.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Optional Compile Dependencies -->
+
+    <!-- Project Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- Compile Dependencies -->
+
+    <!-- Spring MVC starter -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
+    <!-- Spring R2DBC -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+    </dependency>
+
+    <!-- Spring Validation -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- Mapstruct -->
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+    </dependency>
+
+    <!-- Apache Commons -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+
+    <!-- Runtime Dependencies -->
+
+    <!-- Spring DevTools -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- Reactor Tools -->
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-tools</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Spring Boot Configuration Processor -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- FlywayDB -->
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Spring JDBC -->
+    <!-- Flyway depends on JdbcUtils which is within this Dependency -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- H2 R2DBC Driver -->
+    <dependency>
+      <groupId>io.r2dbc</groupId>
+      <artifactId>r2dbc-h2</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- H2 JDBC Driver -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- MariaDB R2DBC Driver -->
+    <dependency>
+      <groupId>org.mariadb</groupId>
+      <artifactId>r2dbc-mariadb</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- MariaDB JDBC Driver -->
+    <dependency>
+      <groupId>org.mariadb.jdbc</groupId>
+      <artifactId>mariadb-java-client</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- MSSQL R2DBC Driver -->
+    <dependency>
+      <groupId>io.r2dbc</groupId>
+      <artifactId>r2dbc-mssql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- MSSQL JDBC Driver -->
+    <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>mssql-jdbc</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Test Dependencies -->
+
+    <!-- Spring Boot Test -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JUnit 5 -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- AssertJ -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+              <goal>repackage</goal>
+            </goals>
+            <configuration>
+              <executable>true</executable>
+              <excludes>
+                <exclude>
+                  <groupId>org.projectlombok</groupId>
+                  <artifactId>lombok</artifactId>
+                </exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessors>
+            <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
+            <annotationProcessor>org.mapstruct.ap.MappingProcessor</annotationProcessor>
+          </annotationProcessors>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
+          <parameters>true</parameters>
+          <showWarnings>true</showWarnings>
+          <compilerArgs>
+            <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+            <compilerArg>-Amapstruct.defaultInjectionStrategy=constructor</compilerArg>
+            <compilerArg>-Amapstruct.suppressGeneratorTimestamp=true</compilerArg>
+            <compilerArg>-Amapstruct.suppressGeneratorVersionInfoComment=true</compilerArg>
+            <compilerArg>-Amapstruct.unmappedTargetPolicy=ERROR</compilerArg>
+            <compilerArg>-Amapstruct.verbose=true</compilerArg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
