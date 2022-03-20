@@ -1,5 +1,6 @@
 package software.coolstuff.spring.reactive.entity;
 
+import com.querydsl.core.annotations.QueryEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import static lombok.AccessLevel.NONE;
 @Data
 @Builder
 @Table("pets")
+@QueryEntity
 public class PetEntity {
   public static final String TABLE_NAME = "pets";
 
