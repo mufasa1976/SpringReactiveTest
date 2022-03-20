@@ -23,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import software.coolstuff.spring.reactive.config.DatabaseConfiguration;
 import software.coolstuff.spring.reactive.config.WebfluxConfiguration;
 import software.coolstuff.spring.reactive.controller.PetController;
@@ -93,7 +94,7 @@ class PetControllerTest {
 
   @Test
   @DisplayName("GET /" + PetController.ENDPOINT + " and expect 3 Entries (verified by JSON-Path)")
-  void ok_list_verifyByJSONPath() {
+  void ok_list_withoutFilter_verifiedByJSONPath() {
     webClient.get().uri("/" + PetController.ENDPOINT)
              .exchange()
              .expectStatus().isOk()
@@ -118,7 +119,7 @@ class PetControllerTest {
 
   @Test
   @DisplayName("GET /" + PetController.ENDPOINT + " and expect 3 Entries (verified by JSON-Mapping)")
-  void ok_list_verifyByJSONMapping() {
+  void ok_list_withoutFiler_verifiedByJSONMapping() {
     webClient.get().uri("/" + PetController.ENDPOINT)
              .exchange()
              .expectStatus().isOk()
@@ -144,6 +145,46 @@ class PetControllerTest {
                          .type(PetModel.Type.CAT)
                          .name("Murli")
                          .build()));
+  }
+
+  @Test
+  @DisplayName("GET /" + PetController.ENDPOINT + "/name=a and expect 2 Entries (verified by JSON-Mapping)")
+  void ok_list_withFilter_verifiedByJSONMapping() {
+    webClient.get().uri(UriComponentsBuilder.fromPath("/" + PetController.ENDPOINT)
+                                            .queryParam("name", "a")
+                                            .toUriString())
+             .exchange()
+             .expectStatus().isOk()
+             .expectHeader().contentType(MediaType.APPLICATION_JSON)
+             .expectBodyList(PetModel.class)
+             .hasSize(2)
+             .isEqualTo(List.of(
+                 PetModel.builder()
+                         .id(3L)
+                         .version(1)
+                         .type(PetModel.Type.DOG)
+                         .name("Amadeus")
+                         .build(),
+                 PetModel.builder()
+                         .id(1L)
+                         .version(1)
+                         .type(PetModel.Type.CAT)
+                         .name("Luna")
+                         .build()));
+  }
+
+  @Test
+  @DisplayName("GET /" + PetController.ENDPOINT + "/name=zzz and expect no Entries")
+  void nok_list_withFilter() {
+    webClient.get().uri(UriComponentsBuilder.fromPath("/" + PetController.ENDPOINT)
+                                            .queryParam("name", "zzz")
+                                            .toUriString())
+             .exchange()
+             .expectStatus().isOk()
+             .expectHeader().contentType(MediaType.APPLICATION_JSON)
+             .expectBody()
+             .jsonPath("$").isArray()
+             .jsonPath("$").isEmpty();
   }
 
   @Test
@@ -251,6 +292,20 @@ class PetControllerTest {
     } catch (EmptyResultDataAccessException ignored) {
       return Optional.empty();
     }
+  }
+
+  @Test
+  @DisplayName("PUT /" + PetController.ENDPOINT + "/99999 and expect HTTP 404 - Not found")
+  void nok_update() {
+    webClient.put().uri("/" + PetController.ENDPOINT + "/{id}", 99999)
+             .bodyValue(PetModel.builder()
+                                .id(99999L)
+                                .version(1)
+                                .type(PetModel.Type.CAT)
+                                .name("Not Exists")
+                                .build())
+             .exchange()
+             .expectStatus().isNotFound();
   }
 
   @Test

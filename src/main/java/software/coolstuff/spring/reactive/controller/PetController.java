@@ -55,8 +55,10 @@ public class PetController implements ControllerSupport, PageableSupport {
   }
 
   @PutMapping("{id}")
-  public Mono<PetModel> update(@PathVariable("id") long id, @RequestBody @Valid Mono<PetModel> pet) {
-    return petService.update(id, pet);
+  public Mono<ResponseEntity<PetModel>> update(@PathVariable("id") long id, @RequestBody @Valid Mono<PetModel> pet) {
+    return petService.update(id, pet)
+                     .map(ResponseEntity::ok)
+                     .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
   @DeleteMapping("{id}")

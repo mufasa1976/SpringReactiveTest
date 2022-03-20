@@ -7,18 +7,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
-import software.coolstuff.spring.reactive.entity.PetEntity;
 import software.coolstuff.spring.reactive.mapper.PetMapper;
 import software.coolstuff.spring.reactive.model.PetModel;
 import software.coolstuff.spring.reactive.repository.PetRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,21 +26,16 @@ public class PetServiceImpl implements PetService {
   public Mono<Page<PetModel>> findAll(String name, Pageable pageable) {
     if (StringUtils.isBlank(name)) {
       return petRepository.count()
-                          .zipWith(monoFromPets(petRepository.findAllBy(pageable)))
+                          .zipWith(petRepository.findAllBy(pageable)
+                                                .map(petMapper::toModel)
+                                                .collectList())
                           .map(toPage(pageable));
     }
     return petRepository.countAllByNameIsContainingIgnoringCase(name)
-                        .zipWith(monoFromPets(petRepository.findAllByNameIsContainingIgnoringCase(name, pageable)))
+                        .zipWith(petRepository.findAllByNameIsContainingIgnoringCase(name, pageable)
+                                              .map(petMapper::toModel)
+                                              .collectList())
                         .map(toPage(pageable));
-  }
-
-  private Mono<List<PetModel>> monoFromPets(Flux<PetEntity> petEntityFlux) {
-    return petEntityFlux.map(petMapper::toModel)
-                        .buffer()
-                        .collect(Collectors.reducing(new ArrayList<>(), (result, list) -> {
-                          result.addAll(list);
-                          return result;
-                        }));
   }
 
   private <T> Function<Tuple2<Long, List<T>>, Page<T>> toPage(Pageable pageable) {
